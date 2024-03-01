@@ -248,3 +248,36 @@ function localgov_publications_preprocess_node(&$variables) {
     $variables['content']['#attached']['library'][] = 'localgov_publications/localgov-publications';
   }
 }
+
+/**
+ * Implements hook_preprocess_media().
+ */
+/**
+ * Implements hook_preprocess_media() to add file size to file media entities.
+ */
+function localgov_publications_preprocess_media(&$variables) {
+  if (isset($variables['media']->field_media_document) && isset($variables['media']->field_pages_count)) {
+    $file_entity = $variables['media']->field_media_document->entity;
+    $pages_count = $variables['media']->field_pages_count->value;
+  } else {
+    $file_entity = null;
+  }
+
+  $pages_count = 0;
+
+  if (!empty($file_entity)) {
+    $file_size = format_size($file_entity->getSize());
+    $variables['file_size'] = $file_size;
+
+    $file_extension = pathinfo($file_entity->get('uri')->value, PATHINFO_EXTENSION);
+    $variables['file_type'] = strtoupper($file_extension);
+  }
+
+  $variables['pages_count'] = $pages_count;
+}
+
+
+
+
+
+
