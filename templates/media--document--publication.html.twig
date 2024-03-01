@@ -32,9 +32,9 @@
 
 {%
   set classes = [
-    'publication-document',
-    'publication-document--pdf'
-  ]
+  'publication-document',
+  'publication-document--pdf'
+]
 %}
 
 {{ attach_library('localgov_publications/localgov-publications-icons') }}
@@ -47,9 +47,11 @@
   </svg>
   <div>
     {{ content }}
-    {{ file_type }}
-    {{ file_size }}
-    {{ 'This file may not be suitable for users of assistive technology.'|t }}
-    {{ 'This file may not be suitable for users of assistive.'|t }}
+    <p class="publication-document-info">
+      <span class="publication-document-type">{{ file_type }}</span>,
+      <span class="publication-document-size">{{ file_size }}</span>,
+      <span>{{ pages_count }} pages</span>
+    </p>
+    <p>{{ 'This file may not be suitable for users of assistive technology.'|t }}</p>
   </div>
 </div>
