@@ -95,6 +95,48 @@ class PublicationNavigationBlock extends BlockBase implements ContainerFactoryPl
     );
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [
+      'collapsible' => TRUE,
+      'collapse_width' => '768',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+
+    $form['collapsible'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Collapsible'),
+      '#description' => $this->t('<insert description>'),
+      '#default_value' => $this->configuration['collapsible'],
+
+    ];
+
+    $form['collapse_width'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Auto-collapse window width (px)'),
+      '#description' => $this->t('<insert description>'),
+      '#default_value' => $this->configuration['collapse_width'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['collapsible'] = $form_state->getValue('collapsible');
+    $this->configuration['collapse_width'] = $form_state->getValue('collapse_width');
+  }
+
   /**
    * {@inheritdoc}
    */
