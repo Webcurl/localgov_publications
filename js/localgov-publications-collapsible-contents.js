@@ -1,11 +1,15 @@
-/**
+(function ($, Drupal, drupalSettings) {
+  /**
  * Collapse able menu for Publication page
  *
  * @param {object} context
  */
 Drupal.behaviors.publicationMenuToggle = {
     attach: function(context) {
-        const menuCollapseBreakpoint = 992;
+
+      if (!drupalSettings.hasOwnProperty('localgov_publications')) {
+        return;
+      }
 
         var headers = [
             $('.lgd-publication-navigation__content-header', context),
@@ -24,27 +28,38 @@ Drupal.behaviors.publicationMenuToggle = {
 
         let previousWidth = -1;
 
-        function initializeStateForMenus() {
+        function initializeStateForMenus(menuCollapseBreakpoint) {
+
+          return function () {
             const previousCollapseState = previousWidth < menuCollapseBreakpoint;
             const newCollapseState = window.innerWidth < menuCollapseBreakpoint;
 
             if (previousCollapseState === newCollapseState && !(previousWidth === -1)) {
-                return;
+              return;
             }
             previousWidth = window.innerWidth;
 
-            headers.forEach(function(header, index) {
-                menus[index].toggleClass('is-hidden', newCollapseState);
-                header.toggleClass('up-icon', !newCollapseState).toggleClass('down-icon', newCollapseState);
+            headers.forEach(function (header, index) {
+              menus[index].toggleClass('is-hidden', newCollapseState);
+              header.toggleClass('up-icon', !newCollapseState).toggleClass('down-icon', newCollapseState);
             });
-        }
-        headers.forEach(function(header, index) {
-            if (!header.data('menuToggleAttached')) {
+            headers.forEach(function (header, index) {
+              if (!header.data('menuToggleAttached')) {
                 toggleMenuVisibilityAndIcon(header, menus[index]);
                 header.data('menuToggleAttached', true);
-            }
-        });
-        initializeStateForMenus();
-        $(window).resize(initializeStateForMenus);
+              }
+            });
+
+          }
+        }
+
+        const resizeCallback = initializeStateForMenus(drupalSettings.localgov_publications.foo.collapse_width);
+
+      if (drupalSettings.localgov_publications.foo.collapsible) {
+        resizeCallback();
+        $(window).resize(resizeCallback);
+      }
+
     }
 };
+})(jQuery, Drupal, drupalSettings);

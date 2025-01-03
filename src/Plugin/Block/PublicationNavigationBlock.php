@@ -168,6 +168,15 @@ class PublicationNavigationBlock extends BlockBase implements ContainerFactoryPl
       if (!empty($output)) {
         $this->node = $node;
         $this->setActiveClass($output['#items']);
+
+        // TODO: block instance identifier?
+        $output['#attached']['drupalSettings']['localgov_publications']['foo'] = [
+          'collapsible' => $this->configuration['collapsible'],
+          'collapse_width' => $this->configuration['collapse_width'],
+        ];
+
+        $output['#attached']['library'][] = 'localgov_publications/localgov-publications-blocks';
+
         return $output;
       }
     }
