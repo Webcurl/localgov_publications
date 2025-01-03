@@ -124,6 +124,11 @@ class PublicationNavigationBlock extends BlockBase implements ContainerFactoryPl
       '#type' => 'number',
       '#title' => $this->t('Auto-collapse window width (px)'),
       '#description' => $this->t('<insert description>'),
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[collapsible]"]' => ['checked' => TRUE],
+        ],
+      ],
       '#default_value' => $this->configuration['collapse_width'],
     ];
 
